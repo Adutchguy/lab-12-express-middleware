@@ -18,7 +18,7 @@ describe('Testing team routes', () => {
     let data = {
       firstName: 'Michael',
       lastName: 'Miller',
-      availabilityDate: '07/02/2017',
+      availabilityDate: ['07/02/2017', '07/09/2017'],
     };
     it('Should return a new team member', () => {
       return superagent.post(`${API_URL}/api/team`)
@@ -53,7 +53,7 @@ describe('Testing team routes', () => {
       return new Team({
         firstName: 'Michael',
         lastName: 'Miller',
-        availabilityDate: '07/02/2017',
+        availabilityDate: ['07/02/2017', '07/09/2017'],
       })
       .save()
       .then(team => tempTeam = team);
@@ -86,7 +86,7 @@ describe('Testing team routes', () => {
       return new Team({
         firstName: 'Michael',
         lastName: 'Miller',
-        availabilityDate: '07/02/2017',
+        availabilityDate: ['07/02/2017', '07/09/2017'],
       })
       .save()
       .then(team => tempTeam = team);
@@ -104,6 +104,21 @@ describe('Testing team routes', () => {
         expect(res.body.submitted).toExist();
       });
     });
+
+    it('Should respond with a 400 status code', () => {
+      return superagent.put(`${API_URL}/api/team/${tempTeam._id}`)
+      .send({})
+      .catch(res => {
+        expect(res.status).toEqual(400);
+      });
+    });
+
+    it('Should respond with a 404', () => {
+      return superagent.put(`${API_URL}/api/team/5952a8d5c1b8d566a64ea23g`)
+      .catch(res => {
+        expect(res.status).toEqual(404);
+      });
+    });
   });
 
   describe('Testing DELETE /api/team:id', () => {
@@ -113,7 +128,7 @@ describe('Testing team routes', () => {
       return new Team({
         firstName: 'Michael',
         lastName: 'Miller',
-        availabilityDate: '07/02/2017',
+        availabilityDate: ['07/02/2017', '07/09/2017'],
       })
       .save()
       .then(team => tempTeam = team);
